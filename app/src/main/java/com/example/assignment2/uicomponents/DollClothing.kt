@@ -1,28 +1,31 @@
 package com.example.assignment2.uicomponents
 
-import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import com.example.assignment2.R
+import com.example.assignment2.model.ClothesData
 
 @Composable
 fun DollClothing(
-    dollClothesList: List<String>,
-    checkStates: List<MutableState<Boolean>>,
-    context: Context
+    checkStatesAndClothesList: SnapshotStateList<ClothesData>,
+    modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+
     Box {
         Image(
             painter = painterResource(id = R.drawable.body),
             contentDescription = null,
         )
-        dollClothesList.forEachIndexed { index, item ->
-            val imgR = if (checkStates[index].value) {
+        checkStatesAndClothesList.forEach { item ->
+            val imgR = if (item.checkState) {
                 context.resources.getIdentifier(
-                    item,
+                    item.clothesName,
                     "drawable",
                     context.packageName
                 )

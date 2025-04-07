@@ -16,7 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ImageWithCheckBox(
+fun ImageNameWithCheckBox(
     checked: Boolean,
     clothes: String,
     modifier: Modifier = Modifier,
@@ -36,7 +36,7 @@ fun ImageWithCheckBox(
 @Composable
 private fun ImageWithCheckBoxPreview() {
     var checked by rememberSaveable { mutableStateOf(false) }
-    ImageWithCheckBox(checked,"arms") {
+    ImageNameWithCheckBox(checked,"arms") {
         checked = it
     }
 }

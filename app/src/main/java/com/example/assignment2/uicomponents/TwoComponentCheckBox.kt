@@ -5,18 +5,19 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.example.assignment2.model.ClothesData
 
 @Composable
 fun TwoComponentCheckBox(
-    dollClothesList: List<String>,
-    checkStates: List<MutableState<Boolean>>
+    checkStatesAndClothesList: SnapshotStateList<ClothesData>,
+    modifier: Modifier = Modifier
 ) {
     Column(
     ) {
-        dollClothesList.chunked(2).forEachIndexed { indexes, items ->
+        checkStatesAndClothesList.chunked(2).forEachIndexed { indexes, items ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly,
@@ -25,8 +26,11 @@ fun TwoComponentCheckBox(
                 items.forEachIndexed { index, item ->
                     val realIndex = indexes * 2 + index
 
-                    ImageWithCheckBox(checkStates[realIndex].value, item) {
-                        checkStates[realIndex].value = it
+                    ImageNameWithCheckBox(checkStatesAndClothesList[realIndex].checkState, item.clothesName) {
+                        checkStatesAndClothesList[realIndex] =
+                            item.copy(
+                                checkState = it
+                            )
                     }
                 }
             }
