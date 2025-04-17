@@ -4,10 +4,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.assignment2.model.ClothesData
 
 @Composable
@@ -27,13 +33,80 @@ fun TwoComponentCheckBox(
                     val realIndex = indexes * 2 + index
 
                     ImageNameWithCheckBox(checkStatesAndClothesList[realIndex].checkState, item.clothesName) {
+                        newChecked ->
                         checkStatesAndClothesList[realIndex] =
                             item.copy(
-                                checkState = it
+                                checkState = newChecked
                             )
                     }
                 }
             }
         }
     }
+}
+
+
+// lazyGrid로 표시
+@Composable
+fun TwoComponentCheckBoxGrid(
+    checkStatesAndClothesList: SnapshotStateList<ClothesData>,
+    modifier: Modifier = Modifier
+) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        itemsIndexed(checkStatesAndClothesList) { index, item ->
+            ImageNameWithCheckBox(
+                checked = item.checkState,
+                clothes = item.clothesName
+            ) { newChecked ->
+                checkStatesAndClothesList[index] =
+                    item.copy(checkState = newChecked)
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun TwoComponentCheckBoxPreview() {
+    val checkStatesAndClothesList = rememberSaveable(saver = ClothesData.ClothesDataListSaver) {
+        mutableStateListOf<ClothesData>(
+            ClothesData(false, "arms"),
+            ClothesData(false, "ears"),
+            ClothesData(false, "eyebrows"),
+            ClothesData(false, "eyes"),
+            ClothesData(false, "glasses"),
+            ClothesData(false, "hat"),
+            ClothesData(false, "mouth"),
+            ClothesData(false, "mustache"),
+            ClothesData(false, "nose"),
+            ClothesData(false, "shoes")
+        )
+    }
+
+    TwoComponentCheckBox(checkStatesAndClothesList)
+}
+
+@Preview
+@Composable
+private fun TwoComponentCheckBoxGridPreview() {
+    val checkStatesAndClothesList = rememberSaveable(saver = ClothesData.ClothesDataListSaver) {
+        mutableStateListOf<ClothesData>(
+            ClothesData(false, "arms"),
+            ClothesData(false, "ears"),
+            ClothesData(false, "eyebrows"),
+            ClothesData(false, "eyes"),
+            ClothesData(false, "glasses"),
+            ClothesData(false, "hat"),
+            ClothesData(false, "mouth"),
+            ClothesData(false, "mustache"),
+            ClothesData(false, "nose"),
+            ClothesData(false, "shoes")
+        )
+    }
+
+    TwoComponentCheckBoxGrid(checkStatesAndClothesList)
 }
